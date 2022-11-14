@@ -4,13 +4,26 @@ import TaskController from './Controllers/TasksController.js';
 //const express = require('express')
 const app = express()
 const port = 3000
+app.use(express.static('public'))
+app.use(bodyParser.json());
+app.use(bodyParser.raw());
+app.use(bodyParser.text());
 
-// module.exports = app;
-// const server = http.Server(app);
-// server.listen(3000, () => {
-//        return true;
-// });
-//app.use(express.static('public'))
+function middleware(req,res,next){
+  console.log('middleware');
+  if(req.query.stop == 1){
+    console.log('out', req.query);
+    res.send('out');
+    return;
+  }
+  next();
+}
+function auth(req,res,next){
+console.log('auth');
+let user=req.query;
+req.user=user;
+next();
+}
 
 app.put('/tasks/:id', TaskController.update) ;
   
